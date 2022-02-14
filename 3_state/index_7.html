@@ -8,7 +8,9 @@
   <script type="text/babel">
     const root = document.getElementById("root");
     const App = () => {
-      const [minutes, setMinutes] = React.useState();
+      const [amount, setAmount] = React.useState();
+			const [inverted, setInverted] = React.useState(false);
+			const reset = () => setAmount(0);
       return (
         <div>
           <h1>
@@ -20,8 +22,9 @@
 							id="minutes" 
 							placeholder="Minutes" 
 							type="number" 
-							value={minutes}
-							onChange={(event) => setMinutes(event.target.value)}
+							value={!inverted ? amount : amount * 60}
+							onChange={(event) => setAmount(event.target.value)}
+							disabled={inverted}
 						/>
 					</div>
 					<div>
@@ -30,11 +33,20 @@
 							id="hours" 
 							placeholder="Hours" 
 							type="number" 
-							value={Math.round(minutes / 60)}
-							disabled
+							value={inverted ? amount : Math.round(amount / 60)}
+							onChange={(event) => setAmount(event.target.value)}
+							disabled={!inverted}
 						/>
 					</div>
-					<button onClick={() => setMinutes(0)}>Reset</button>
+					<button onClick={reset}>Reset</button>
+					<button
+						onClick={() => {
+							reset()
+							setInverted((current) => !current)
+						}
+					}>
+						Invert
+					</button>
         </div>
       );
     }
